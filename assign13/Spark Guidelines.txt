@@ -1,0 +1,70 @@
+Installation of Scala 2.13.5
+
+sudo apt-get remove scala-library scala
+sudo wget https://downloads.lightbend.com/scala/2.13.5/scala-2.13.5.deb
+sudo dpkg -i scala-2.13.5.deb
+sudo apt-get update
+sudo apt-get install scala
+-------------------------------------------------------------------------------
+
+1) Create file WordCount.scala
+
+
+import org.apache.spark.sql.SparkSession
+
+object WordCount {
+  def main(args: Array[String]): Unit = {
+    // Create a SparkSession
+    val spark = SparkSession.builder()
+      .appName("WordCount")
+      .getOrCreate()
+
+    // Check if the input file path is provided as a command-line argument
+    if (args.length != 1) {
+      println("Usage: WordCount <input-file>")
+      System.exit(1)
+    }
+
+    // Read input file
+    val inputFile = args(0)
+    val lines = spark.read.textFile(inputFile)
+
+    // Split each line into words
+    import spark.implicits._
+    val words = lines.flatMap(_.split("\\W+"))
+
+    // Count occurrences of each word
+    val wordCounts = words.groupBy("value").count().sort("count")
+
+    // Show word counts
+    wordCounts.show()
+
+    // Stop the SparkSession
+    spark.stop()
+  }
+}
+
+
+2) Create input file input.txt
+
+	Darshan mahajan
+	Gaurav patil
+	Pratik patil
+	Rahul patil
+	Darshan Bari
+	
+3) Compile scala source file
+
+scalac -classpath "$SPARK_HOME/jars/*" WordCount.scala
+
+
+4) Create jar file named 'WordCount.jar'
+
+jar cf WordCount.jar WordCount*.class
+
+
+5) Submission of Spark JOb
+
+$SPARK_HOME/bin/spark-submit --class WordCount --master local WordCount.jar /path/to/input/input.txt
+
+
