@@ -57,14 +57,21 @@ object WordCount {
 
 scalac -classpath "$SPARK_HOME/jars/*" WordCount.scala
 
-
 4) Create jar file named 'WordCount.jar'
 
 jar cf WordCount.jar WordCount*.class
 
-
-5) Submission of Spark JOb
+5) Submission of Spark Job
 
 $SPARK_HOME/bin/spark-submit --class WordCount --master local WordCount.jar /path/to/input/input.txt
 
 
+
+val data=sc.textFile("word_count.txt")
+data.collect;
+val splitdata = data.flatMap(line => line.split(" ")); 
+splitdata.collect; 
+val mapdata = splitdata.map(word => (word,1)); 
+mapdata.collect; 
+val reducedata = mapdata.reduceByKey(_+_); 
+reducedata.collect;
