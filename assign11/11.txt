@@ -1,0 +1,12 @@
+start-dfs.sh
+start-yarn.sh
+
+javac -classpath path_to/hadoop-common-3.3.5.jar:/path_to/hadoop-mapreduce-client-core-3.3.5.jar -d path_to/alljava files
+
+jar cvf WordCount.jar *.class
+
+hadoop fs -copyFromLocal wordinput.txt /user/hadoop/wordinput.txt
+
+hadoop jar WordCount.jar WordCount /user/hadoop/wordinput.txt /user/hadoop/wordoutput.txt
+
+hadoop fs -cat /user/hadoop/wordoutput/part-r-00000
