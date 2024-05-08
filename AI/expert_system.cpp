@@ -1,6 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+/*
+    Components of an Expert System:
+        1. Knowledge Base : Contains facts and rules
+        2. Inference Engine : makes decisions
+        3. User Interface : interact with the user
+*/
+
 // Help Desk Management
 // Responses for various inquiries.
 unordered_map<string, string> responses = {
